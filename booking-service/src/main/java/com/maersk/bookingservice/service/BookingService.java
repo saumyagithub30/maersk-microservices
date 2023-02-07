@@ -21,9 +21,11 @@ public class BookingService {
 
     @Autowired
     private final BookingRepository bookingRepository;
+    @Autowired
+    private final IdGeneratorService idGeneratorService;
 
     @PostConstruct
-    public Mono<Object> initialize() {
+    public void initialize() {
         Booking obj = Booking.builder().id("957000001")
                 .containerType("DRY")
                 .containerSize(20)
@@ -31,7 +33,7 @@ public class BookingService {
                 .destination("Singapore")
                 .quantity(5)
                 .createdDate(Timestamp.from(Instant.now())).build();
-        return bookingRepository.createTable()
+                bookingRepository.createTable()
                 .then(bookingRepository.findById("1")
                         .flatMap(booking -> Mono.empty())
                         .switchIfEmpty(bookingRepository.save(obj)));
@@ -42,10 +44,11 @@ public class BookingService {
         } catch (InvalidContainerSizeException e) {
             throw new InvalidBookingRequest("Invalid Booking Request");
         }
+
         Booking booking = convertBookingRequest(bookRequest);
         Mono<Booking> b = bookingRepository.save(booking);
         BookResponse bookResponse = new BookResponse();
-        bookResponse.setBookingRef(b.block().getId());
+//        bookResponse.setBookingRef(b.block().getId());
         return bookResponse;
     }
 
@@ -58,7 +61,10 @@ public class BookingService {
     }
 
     private Booking convertBookingRequest(BookRequest bookRequest) {
-        return Booking.builder().containerSize(bookRequest.getContainerSize())
+        String id = idGeneratorService.generateBookingId();
+        return Booking.builder()
+                .id(id)
+                .containerSize(bookRequest.getContainerSize())
                 .containerType(bookRequest.getContainerType())
                 .origin(bookRequest.getOrigin())
                 .destination(bookRequest.getDestination())
