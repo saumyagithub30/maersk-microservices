@@ -1,5 +1,6 @@
 package com.maersk.availabiltyservice.exception;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.sun.jdi.request.InvalidRequestStateException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -32,6 +33,16 @@ public class AvailabilityServiceExceptionHandler {
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
+        return errors;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidFormatException.class)
+    public Map<String, String> handleInValidFormatExceptions(
+            InvalidFormatException ex) {
+        Map<String, String> errors = new HashMap<>();
+
+        errors.put(ex.getValue().toString(), ex.getMessage());
         return errors;
     }
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
