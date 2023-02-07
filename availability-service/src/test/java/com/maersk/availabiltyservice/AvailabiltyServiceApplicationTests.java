@@ -30,12 +30,12 @@ class AvailabiltyServiceApplicationTests {
 
 	@Test
 	public void whenPostRequestToCheckAvailability_thenCorrectResponse() throws Exception {
-		String card = "{\"containerType\": \"DRY\", \"containerSize\" : \"18\", \"origin\": \"Southampton\", \"destination\": \"Singapore\",\"quantity\" : \"5\" }";
-		mockMvc.perform(MockMvcRequestBuilders.post("/creditcard/add")
-						.content(card)
+		String checkRequest = "{\"containerType\": \"DRY\", \"containerSize\" : \"18\", \"origin\": \"Southampton\", \"destination\": \"Singapore\",\"quantity\" : \"5\" }";
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/bookings/checkavailability")
+						.content(checkRequest)
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest())
-				.andExpect(MockMvcResultMatchers.jsonPath("$.containerType", Is.is("Please Enter Valid Container Size")))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.containerSize", Is.is("Please Enter Valid Container Size")))
 				.andExpect(MockMvcResultMatchers.content()
 						.contentType(MediaType.APPLICATION_JSON));
 	}

@@ -2,6 +2,7 @@ package com.maersk.bookingservice.service;
 
 import com.maersk.bookingservice.model.IdGenerator;
 import com.maersk.bookingservice.repository.IdGeneratorRepository;
+import com.maersk.bookingservice.utils.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,14 @@ public class IdGeneratorService {
     }
 
     public String generateBookingId() {
-//        idGeneratorRepository.findByClusterId();
-        return "957000002";
+
+        IdGenerator obj = idGeneratorRepository.findByClusterId(Constants.CLUSTER_ID);
+        String id = String.format("%s00000%s",obj.getClusterId(),obj.getId());
+        obj.setId(obj.getId()+1);
+        idGeneratorRepository.save(obj);
+        return id;
+
     }
+
+
 }
