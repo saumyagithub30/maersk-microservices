@@ -1,0 +1,15 @@
+spring:
+  data:
+    cassandra:
+      contact-points: localhost
+      port: 9042
+      keyspace-name: maersk
+      username: booking_user
+      password: booking
+      schema-action: create_if_not_exists
+      local-datacenter: datacenter1
+      request:
+        timeout: 30s
+      connection:
+        connect-timeout: 30s
+        init-query-timeout: 30s
