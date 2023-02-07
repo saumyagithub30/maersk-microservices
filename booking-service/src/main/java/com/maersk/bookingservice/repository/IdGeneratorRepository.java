@@ -12,8 +12,11 @@ public interface IdGeneratorRepository extends ReactiveCassandraRepository<IdGen
     @Query("CREATE TABLE IF NOT EXISTS id_generator (id int PRIMARY KEY, cluster_id int);")
     Mono<Void> createTable();
 
+//
+//    @Query("SELECT * FROM item WHERE columnName = ?0")
+//    Mono<IdGenerator> findByColumnName(String columnValue);
     @AllowFiltering
-    IdGenerator findByClusterId(Integer clusterId);
+    Mono<IdGenerator> findByClusterId(Integer clusterId);
 
 
 

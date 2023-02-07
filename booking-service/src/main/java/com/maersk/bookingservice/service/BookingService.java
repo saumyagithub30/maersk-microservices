@@ -45,7 +45,7 @@ public class BookingService {
             throw new InvalidBookingRequest("Invalid Booking Request");
         }
 
-        Booking booking = convertBookingRequest(bookRequest);
+        Booking booking = generateBookingItem(bookRequest);
         Mono<Booking> b = bookingRepository.save(booking);
         BookResponse bookResponse = new BookResponse();
 //        bookResponse.setBookingRef(b.block().getId());
@@ -60,7 +60,7 @@ public class BookingService {
         throw new InvalidContainerSizeException("Please enter valid Container Size");
     }
 
-    private Booking convertBookingRequest(BookRequest bookRequest) {
+    private Booking generateBookingItem(BookRequest bookRequest) {
         String id = idGeneratorService.generateBookingId();
         return Booking.builder()
                 .id(id)

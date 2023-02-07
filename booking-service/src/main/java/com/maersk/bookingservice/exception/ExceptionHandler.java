@@ -1,11 +1,9 @@
-package com.maersk.availabiltyservice.exception;
+package com.maersk.bookingservice.exception;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.sun.jdi.request.InvalidRequestStateException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -13,9 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
-public class AvailabilityServiceExceptionHandler {
+public class ExceptionHandler {
 
-    @ExceptionHandler(value = {InvalidContainerSizeException.class})
+    @org.springframework.web.bind.annotation.ExceptionHandler(value = {InvalidContainerSizeException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleInValidationExceptions(Exception ex) {
         Map<String, String> errors = new HashMap<>();
@@ -24,7 +22,7 @@ public class AvailabilityServiceExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(
             MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
@@ -37,7 +35,7 @@ public class AvailabilityServiceExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(InvalidFormatException.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(InvalidFormatException.class)
     public Map<String, String> handleInValidFormatExceptions(
             InvalidFormatException ex) {
         Map<String, String> errors = new HashMap<>();
@@ -46,12 +44,12 @@ public class AvailabilityServiceExceptionHandler {
         return errors;
     }
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(Exception.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(Exception.class)
     public Map<String, String> handleRuntimeException(
             Exception ex) {
         Map<String, String> errors = new HashMap<>();
         ex.printStackTrace();
-        errors.put("error", "Internal Server Error");
+        errors.put("error", "INTERNAL_SERVER_ERROR");
         return errors;
     }
 }

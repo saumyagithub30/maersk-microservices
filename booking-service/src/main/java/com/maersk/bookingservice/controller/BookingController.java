@@ -19,7 +19,7 @@ public class BookingController {
 
     private final BookingService bookingService;
 
-    @PostMapping("/request")
+    @PostMapping("/v1/containers")
     public BookResponse save(@RequestBody BookRequest bookRequest) throws InvalidBookingRequest {
         BookResponse bookResponse = bookingService.createBooking(bookRequest);
         return bookResponse;
