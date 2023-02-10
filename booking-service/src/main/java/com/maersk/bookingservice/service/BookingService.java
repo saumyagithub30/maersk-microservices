@@ -7,22 +7,18 @@ import com.maersk.bookingservice.model.BookResponse;
 import com.maersk.bookingservice.model.Booking;
 import com.maersk.bookingservice.repository.BookingRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.PostConstruct;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
 public class BookingService {
 
-    @Autowired
     private final BookingRepository bookingRepository;
-    @Autowired
     private final IdGeneratorService idGeneratorService;
 
     @PostConstruct

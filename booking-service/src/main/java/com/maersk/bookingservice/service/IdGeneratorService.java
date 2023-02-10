@@ -4,7 +4,6 @@ import com.maersk.bookingservice.model.IdGenerator;
 import com.maersk.bookingservice.repository.IdGeneratorRepository;
 import com.maersk.bookingservice.utils.Constants;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -15,7 +14,6 @@ import javax.annotation.PostConstruct;
 @Service
 public class IdGeneratorService {
 
-    @Autowired
     private final IdGeneratorRepository idGeneratorRepository;
 
     @PostConstruct
