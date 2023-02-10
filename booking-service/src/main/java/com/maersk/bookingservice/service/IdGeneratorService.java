@@ -27,14 +27,18 @@ public class IdGeneratorService {
 
         Mono<IdGenerator> idGeneratorMono = idGeneratorRepository.findByClusterId(Constants.CLUSTER_ID);
 
-        Mono<String> booking = idGeneratorMono.map(value -> {
-            Integer updatedValue = value.getId()+1;
-            value.setId(updatedValue);
-            idGeneratorRepository.save(value);
-            return String.format("%s00000%s", value.getClusterId(), updatedValue);
-        });
 
-        return booking.toProcessor().block();
+        Mono<IdGenerator> updatedItem = idGeneratorRepository.findByClusterId(Constants.CLUSTER_ID)
+                .map(value -> {
+                    value.setId(value.getId()+1);
+                    return value;
+                })
+                .flatMap(idGeneratorRepository::save);
+
+        return updatedItem.map(value -> {
+            idGeneratorRepository.deleteById(value.getId()-1).subscribe();
+            return String.format("%s00000%s", value.getClusterId(), value.getId());
+        }).toProcessor().block();
 
     }
 
