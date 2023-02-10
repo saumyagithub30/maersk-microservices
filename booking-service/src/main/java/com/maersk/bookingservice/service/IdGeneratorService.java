@@ -25,9 +25,6 @@ public class IdGeneratorService {
      */
     public String generateBookingId() {
 
-        Mono<IdGenerator> idGeneratorMono = idGeneratorRepository.findByClusterId(Constants.CLUSTER_ID);
-
-
         Mono<IdGenerator> updatedItem = idGeneratorRepository.findByClusterId(Constants.CLUSTER_ID)
                 .map(value -> {
                     value.setId(value.getId()+1);
