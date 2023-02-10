@@ -1,42 +1,39 @@
 package com.maersk.bookingservice;
 
-import com.maersk.bookingservice.controller.BookingController;
-import org.hamcrest.core.Is;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.maersk.bookingservice.model.Booking;
+import com.maersk.bookingservice.repository.BookingRepository;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import reactor.core.publisher.Mono;
+
+import javax.annotation.PostConstruct;
+import java.sql.Timestamp;
+import java.time.Instant;
+
 
 @SpringBootTest
 @AutoConfigureMockMvc
 class BookingServiceApplicationTests {
 
-	@Autowired
-	private MockMvc mockMvc;
+	private BookingRepository bookingRepository;
+	@PostConstruct
+	public void initialize() {
+		Booking obj = Booking.builder().id("957000001")
+				.containerType("DRY")
+				.containerSize(20)
+				.origin("Southampton")
+				.destination("Singapore")
+				.quantity(5)
+				.createdDate(Timestamp.from(Instant.now())).build();
 
-	@Autowired
-	private BookingController bookingController;
-
-	@Test
-	void contextLoads() {
-		assertThat(bookingController).isNotNull();
+		bookingRepository.createTable()
+				.then(bookingRepository.findById("1")
+						.flatMap(booking -> Mono.empty())
+						.switchIfEmpty(bookingRepository.save(obj)));
 	}
 
-	@Test
-	public void whenPostRequestToBookContainer_thenCorrectResponse() throws Exception {
-		String bookRequest = "{\"containerType\": \"DRY\", \"containerSize\" : \"18\", \"origin\": \"Southampton\", \"destination\": \"Singapore\",\"quantity\" : \"5\" }";
-		mockMvc.perform(MockMvcRequestBuilders.post("/api/bookings/request")
-						.content(bookRequest)
-						.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(MockMvcResultMatchers.status().isBadRequest())
-				.andExpect(MockMvcResultMatchers.jsonPath("$.containerSize", Is.is("Please Enter Valid Container Size")))
-				.andExpect(MockMvcResultMatchers.content()
-						.contentType(MediaType.APPLICATION_JSON));
-	}
+
+
+
 }

@@ -20,7 +20,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class BookingController {
     private final BookingService bookingService;
-    @PostMapping(value = "/v1/containers", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/v1/containers")
     public Mono<BookResponse> save(@RequestBody BookRequest bookRequest) throws InvalidBookingRequest {
         return bookingService.createBooking(bookRequest);
     }

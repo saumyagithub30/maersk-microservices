@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import javax.annotation.PostConstruct;
 import java.sql.Timestamp;
 import java.time.Instant;
 
@@ -21,20 +20,7 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final IdGeneratorService idGeneratorService;
 
-    @PostConstruct
-    public void initialize() {
-        Booking obj = Booking.builder().id("957000001")
-                .containerType("DRY")
-                .containerSize(20)
-                .origin("Southampton")
-                .destination("Singapore")
-                .quantity(5)
-                .createdDate(Timestamp.from(Instant.now())).build();
-                bookingRepository.createTable()
-                .then(bookingRepository.findById("1")
-                        .flatMap(booking -> Mono.empty())
-                        .switchIfEmpty(bookingRepository.save(obj)));
-    }
+
     public Mono<BookResponse> createBooking(BookRequest bookRequest) throws InvalidBookingRequest {
         try {
             validateBookingRequest(bookRequest);

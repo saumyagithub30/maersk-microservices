@@ -1,6 +1,7 @@
 package com.maersk.availablityservice.model;
 
 import com.maersk.availablityservice.utils.ContainerType;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.Max;
@@ -8,6 +9,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 @Data
+@Builder
 public class AvailabilityRequest {
 
     private ContainerType containerType;

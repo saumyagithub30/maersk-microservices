@@ -16,17 +16,6 @@ public class IdGeneratorService {
 
     private final IdGeneratorRepository idGeneratorRepository;
 
-    @PostConstruct
-    public void initialize() {
-        IdGenerator obj = IdGenerator.builder().id(1)
-                .clusterId(957)
-                .build();
-        idGeneratorRepository.createTable()
-                .then(idGeneratorRepository.findById(1)
-                        .flatMap(booking -> Mono.empty())
-                        .switchIfEmpty(idGeneratorRepository.save(obj)));
-    }
-
     /**
      * @return get and update the auto incr
      * as it is not directly supported in cassandra
