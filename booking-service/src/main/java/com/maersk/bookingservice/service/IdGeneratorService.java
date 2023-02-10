@@ -6,7 +6,6 @@ import com.maersk.bookingservice.utils.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import reactor.core.Disposable;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.PostConstruct;
@@ -39,20 +38,16 @@ public class IdGeneratorService {
      */
     public String generateBookingId() {
 
-        Mono<IdGenerator> obj = idGeneratorRepository.findByClusterId(Constants.CLUSTER_ID);
-        final IdGenerator[] item = new IdGenerator[1];
-        obj.subscribe(idGenerator -> {
-           item[0] = IdGenerator.builder()
-                    .clusterId(idGenerator.getClusterId())
-                    .id(idGenerator.getId())
-                    .build();
-        }, error -> {
-            throw new RuntimeException("Internal Server Error");
+        Mono<IdGenerator> idGeneratorMono = idGeneratorRepository.findByClusterId(Constants.CLUSTER_ID);
+
+        Mono<String> booking = idGeneratorMono.map(value -> {
+            Integer updatedValue = value.getId()+1;
+            value.setId(updatedValue);
+            idGeneratorRepository.save(value);
+            return String.format("%s00000%s", value.getClusterId(), updatedValue);
         });
-        String bookingId = String.format("%s00000%s", item[0].getClusterId(), item[0].getId());
-        item[0].setId(item[0].getId()+1);
-        idGeneratorRepository.save(item[0]);
-        return bookingId;
+
+        return booking.toProcessor().block();
 
     }
 

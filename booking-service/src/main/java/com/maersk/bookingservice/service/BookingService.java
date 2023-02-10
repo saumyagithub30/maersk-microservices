@@ -14,6 +14,7 @@ import reactor.core.publisher.Mono;
 import javax.annotation.PostConstruct;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -38,18 +39,17 @@ public class BookingService {
                         .flatMap(booking -> Mono.empty())
                         .switchIfEmpty(bookingRepository.save(obj)));
     }
-    public BookResponse createBooking(BookRequest bookRequest) throws InvalidBookingRequest {
+    public Mono<BookResponse> createBooking(BookRequest bookRequest) throws InvalidBookingRequest {
         try {
             validateBookingRequest(bookRequest);
         } catch (InvalidContainerSizeException e) {
             throw new InvalidBookingRequest("Invalid Booking Request");
         }
 
-        Booking booking = generateBookingItem(bookRequest);
-        Mono<Booking> b = bookingRepository.save(booking);
-        BookResponse bookResponse = new BookResponse();
-//        bookResponse.setBookingRef(b.block().getId());
-        return bookResponse;
+        Booking booking = builder(bookRequest);
+        Mono<Booking> item = bookingRepository.save(booking);
+        String id = item.toProcessor().block().getId();
+        return Mono.just(BookResponse.builder().bookingRef(id).build());
     }
 
     private void validateBookingRequest(BookRequest bookRequest) throws InvalidContainerSizeException {
@@ -60,7 +60,7 @@ public class BookingService {
         throw new InvalidContainerSizeException("Please enter valid Container Size");
     }
 
-    private Booking generateBookingItem(BookRequest bookRequest) {
+    private Booking builder(BookRequest bookRequest) {
         String id = idGeneratorService.generateBookingId();
         return Booking.builder()
                 .id(id)
