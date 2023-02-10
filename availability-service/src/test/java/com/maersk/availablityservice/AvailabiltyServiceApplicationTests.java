@@ -1,6 +1,6 @@
-package com.maersk.availabiltyservice;
+package com.maersk.availablityservice;
 
-import com.maersk.availabiltyservice.controller.AvailabilityController;
+import com.maersk.availablityservice.controller.AvailabilityController;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

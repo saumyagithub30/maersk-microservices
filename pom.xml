@@ -6,6 +6,7 @@
 	<modules>
 		<module>availability-service</module>
 		<module>booking-service</module>
+		<module>external-service</module>
 	</modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>

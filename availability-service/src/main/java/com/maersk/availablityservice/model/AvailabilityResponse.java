@@ -1,4 +1,4 @@
-package com.maersk.availabiltyservice.model;
+package com.maersk.availablityservice.model;
 
 import lombok.Builder;
 import lombok.Data;
@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 @Builder
 public class AvailabilityResponse {
-    private boolean available;
+    private Boolean available;
 }

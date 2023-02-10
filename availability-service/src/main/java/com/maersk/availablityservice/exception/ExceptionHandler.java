@@ -1,4 +1,4 @@
-package com.maersk.availabiltyservice.exception;
+package com.maersk.availablityservice.exception;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.HttpStatus;
@@ -48,7 +48,6 @@ public class ExceptionHandler {
     public Map<String, String> handleRuntimeException(
             Exception ex) {
         Map<String, String> errors = new HashMap<>();
-        ex.printStackTrace();
         errors.put("error", "Internal Server Error");
         return errors;
     }

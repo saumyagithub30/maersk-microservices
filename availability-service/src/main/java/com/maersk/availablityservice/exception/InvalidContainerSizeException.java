@@ -1,4 +1,4 @@
-package com.maersk.availabiltyservice.exception;
+package com.maersk.availablityservice.exception;
 
 public class InvalidContainerSizeException extends Exception{
 

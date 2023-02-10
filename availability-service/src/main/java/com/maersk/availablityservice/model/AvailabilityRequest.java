@@ -1,8 +1,7 @@
-package com.maersk.availabiltyservice.model;
+package com.maersk.availablityservice.model;
 
-import com.maersk.availabiltyservice.utils.ContainerType;
+import com.maersk.availablityservice.utils.ContainerType;
 import lombok.Data;
-import lombok.Value;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
