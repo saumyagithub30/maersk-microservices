@@ -33,7 +33,9 @@ public class IdGeneratorService {
                 .flatMap(idGeneratorRepository::save);
 
         return updatedItem.map(value -> {
-            idGeneratorRepository.deleteById(value.getId()-1).subscribe();
+            idGeneratorRepository.deleteById(value.getId()-1).doOnError(throwable -> {
+                System.out.println("Exception Occured while deleting");
+            }).subscribe();
             return String.format("%s00000%s", value.getClusterId(), value.getId());
         }).toProcessor().block();
 
