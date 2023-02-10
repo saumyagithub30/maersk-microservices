@@ -17,27 +17,25 @@ public class AvailabilityService {
 
     private final WebClient webClient;
 
-    public Mono<AvailabilityResponse> isInStockCheck(AvailabilityRequest availabilityRequest) throws InvalidContainerSizeException {
+    public Mono<AvailabilityResponse> isInStock(AvailabilityRequest availabilityRequest) throws InvalidContainerSizeException {
         Mono<Boolean> isAvailable = null;
         final Mono<AvailabilityResponse>[] item = new Mono[]{Mono.just(AvailabilityResponse.builder().build())};
-        if(validateInput(availabilityRequest)) {
-             return webClient.get().uri(Constants.MAERSK_EXTERNAL_URL)
-                    .retrieve()
-                    .bodyToMono(InventoryResponse.class)
-                    .map(storageData -> storageData.getAvailableSpace() > 0)
-                     .flatMap(space -> {
-                         return Mono.just(AvailabilityResponse.builder().available(space).build());
-                     });
-        } else {
-            throw new InvalidContainerSizeException("Please enter valid Container Size");
-        }
+        validateInput(availabilityRequest);
+
+        return webClient.get().uri(Constants.MAERSK_EXTERNAL_URL)
+                .retrieve()
+                .bodyToMono(InventoryResponse.class)
+                .map(storageData -> storageData.getAvailableSpace() > 0)
+                .flatMap(space -> {
+                    return Mono.just(AvailabilityResponse.builder().available(space).build());
+                });
     }
 
-    public boolean validateInput(AvailabilityRequest availabilityRequest) {
+    public boolean validateInput(AvailabilityRequest availabilityRequest) throws InvalidContainerSizeException {
         int containerSize = availabilityRequest.getContainerSize();
         if(containerSize==20 || containerSize==40) {
             return true;
         }
-        return false;
+        throw new InvalidContainerSizeException("Please enter valid Container Size");
     }
 }

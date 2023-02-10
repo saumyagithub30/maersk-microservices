@@ -12,8 +12,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 @ExtendWith(SpringExtension.class)
 public class AvailabilityServiceTest {
 
@@ -21,7 +19,7 @@ public class AvailabilityServiceTest {
     private AvailabilityService availabilityService;
 
     @Test
-    public void shouldCheckAvailability() throws InvalidContainerSizeException {
+    public void shouldCheckAvailability_ExceptionThrown() throws InvalidContainerSizeException {
         AvailabilityRequest availabilityRequest = AvailabilityRequest
                 .builder()
                 .containerType(ContainerType.valueOf("DRY"))
@@ -30,10 +28,12 @@ public class AvailabilityServiceTest {
                 .origin("Southampton")
                 .quantity(5)
                 .build();
-        Mono<AvailabilityResponse> availabilityResponseMono = availabilityService.isInStockCheck(availabilityRequest);
+        Mono<AvailabilityResponse> availabilityResponseMono = availabilityService.isInStock(availabilityRequest);
         StepVerifier
                 .create(availabilityResponseMono)
                 .expectErrorMatches(throwable -> throwable instanceof InvalidContainerSizeException)
                 .verify();
     }
+
+
 }

@@ -22,7 +22,7 @@ public class AvailabilityController {
     @PostMapping(value = "/checkAvailability", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public Mono<AvailabilityResponse> isInStock(@Valid @RequestBody AvailabilityRequest availabilityRequest) throws InvalidContainerSizeException {
-        return availabilityService.isInStockCheck(availabilityRequest);
+        return availabilityService.isInStock(availabilityRequest);
     }
 
 }

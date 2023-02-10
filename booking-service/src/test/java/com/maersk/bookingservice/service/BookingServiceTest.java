@@ -59,7 +59,7 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void shouldGetInvalidContainerSize() throws InvalidBookingRequest {
+    public void shouldGetInvalidContainerSize_ExceptionThrown() throws InvalidBookingRequest {
         BookRequest bookrequest = BookRequest.builder()
                 .containerType("DRY")
                 .containerSize(10)

@@ -31,14 +31,14 @@ public class AvailabilityControllerTest {
     @Test
     public void shouldCheckAvailability() throws InvalidContainerSizeException {
         AvailabilityRequest availabilityRequest = AvailabilityRequest.builder()
-                .containerType(ContainerType.valueOf("DRY"))
+                .containerType(ContainerType.DRY)
                 .containerSize(20)
                 .destination("Singapore")
                 .origin("Southampton")
                 .quantity(5)
                 .build();
         AvailabilityResponse availabilityResponse = AvailabilityResponse.builder().available(true).build();
-        when(availabilityService.isInStockCheck(availabilityRequest)).thenReturn(Mono.just(availabilityResponse));
+        when(availabilityService.isInStock(availabilityRequest)).thenReturn(Mono.just(availabilityResponse));
         webClient
                 .post().uri("/api/bookings/checkAvailability")
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
